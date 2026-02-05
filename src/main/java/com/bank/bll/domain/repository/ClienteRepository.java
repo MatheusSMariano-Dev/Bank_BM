@@ -1,6 +1,6 @@
-package com.bank.bll.domain.cliente.repository;
+package com.bank.bll.domain.repository;
 
-import com.bank.bll.domain.cliente.Cliente;
+import com.bank.bll.domain.cliente.Conta.Cliente.Cliente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
