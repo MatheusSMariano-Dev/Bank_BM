@@ -40,5 +40,4 @@ public class Cliente {
     @Column(name = "complemento")
     private String complemento;
 
-
 }
