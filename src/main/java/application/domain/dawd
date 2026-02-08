@@ -1,0 +1,59 @@
+src/main/java/br/com/seubanco
+│
+├── application
+│   ├── controller
+│   │   ├── ClienteController.java
+│   │   ├── ContaController.java
+│   │   └── TransacaoController.java
+│   │
+│   └── dto
+│       ├── cliente
+│       │   ├── ClienteRequest.java
+│       │   └── ClienteResponse.java
+│       │
+│       ├── conta
+│       │   ├── ContaRequest.java
+│       │   └── ContaResponse.java
+│       │
+│       └── transacao
+│           ├── TransacaoRequest.java
+│           └── TransacaoResponse.java
+│
+├── domain
+│   ├── cliente
+│   │   ├── Cliente.java
+│   │   └── ClienteStatus.java
+│   │
+│   ├── conta
+│   │   ├── Conta.java
+│   │   └── ContaStatus.java
+│   │
+│   └── transacao
+│       ├── Transacao.java
+│       └── TipoTransacao.java
+│
+├── service
+│   ├── ClienteService.java
+│   ├── ContaService.java
+│   └── TransacaoService.java
+│
+├── infrastructure
+│   ├── repository
+│   │   ├── ClienteRepository.java
+│   │   ├── ContaRepository.java
+│   │   └── TransacaoRepository.java
+│   │
+│   ├── exception
+│   │   ├── BusinessException.java
+│   │   └── ResourceNotFoundException.java
+│   │
+│   └── persistence
+│       └── config
+│           └── JpaConfig.java
+│
+└── shared
+    ├── config
+    │   └── SwaggerConfig.java
+    │
+    └── util
+        └── UUIDGenerator.java
