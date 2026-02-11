@@ -9,20 +9,16 @@ import java.util.UUID;
 
 // Representa uma transação financeira relacionada a uma conta.
 @Entity
-
-// Define o nome da tabela no banco como "transactions".
 @Table(name = "transactions")
 public class Transaction {
 
-    // Chave primária da tabela de transações.
+    // Identificador único da transação.
     @Id
     @GeneratedValue
     private UUID id;
 
     // Muitas transações pertencem a uma conta.
     @ManyToOne
-
-    // Coluna de chave estrangeira que referencia a conta.
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
@@ -30,47 +26,56 @@ public class Transaction {
     @Column(nullable = false)
     private BigDecimal amount;
 
-    // Tipo da transação (DEPÓSITO, SAQUE, TRANSFERÊNCIA).
+    // Tipo da transação (DEPOSIT, WITHDRAW, TRANSFER).
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TransactionType type;
 
-    // Data e hora em que a transação foi criada.
+    // Data e hora da criação.
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    // Construtor protegido exigido pelo JPA.
+    // Construtor exigido pelo JPA.
     protected Transaction() {
     }
 
-    // Cria uma nova transação para uma conta.
+    // Cria uma nova transação validando os dados.
     public Transaction(Account account, BigDecimal amount, TransactionType type) {
+
+        if (account == null) {
+            throw new IllegalArgumentException("Conta não pode ser nula");
+        }
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor da transação deve ser positivo");
+        }
+
+        if (type == null) {
+            throw new IllegalArgumentException("Tipo da transação não pode ser nulo");
+        }
+
         this.account = account;
         this.amount = amount;
         this.type = type;
         this.createdAt = LocalDateTime.now();
     }
 
-    // Retorna o identificador da transação.
     public UUID getId() {
         return id;
     }
 
-    // Retorna a conta relacionada.
     public Account getAccount() {
         return account;
     }
 
-    // Retorna o valor da transação.
     public BigDecimal getAmount() {
         return amount;
     }
 
-    // Retorna o tipo da transação.
     public TransactionType getType() {
         return type;
     }
 
-    // Retorna a data e hora de criação.
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }

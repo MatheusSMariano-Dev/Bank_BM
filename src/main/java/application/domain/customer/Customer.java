@@ -1,44 +1,101 @@
 package application.domain.customer;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
-@Table
 @Entity
+@Table(name = "customers")
 public class Customer {
 
-    //identificador
+    // Identificador único do cliente
     @Id
-    @Column(name = "id")
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    //dados pessoais
-    @Column(name = "name")
+    // Dados pessoais
+    @Column(nullable = false)
     private String name;
-    @Column(name = "cpf")
+
+    @Column(nullable = false, unique = true)
     private String cpf;
-    @Column(name = "dateOfBirth")
+
+    @Column(nullable = false)
     private LocalDate dateOfBirth;
 
-    //contato
-    @Column(name = "email")
+    // Contato
+    @Column(nullable = false)
     private String email;
-    @Column(name = "telephone")
+
     private String telephone;
-    @Column(name = "cellphone")
+
     private String cellphone;
-    //endereço
-    @Column(name = "zipCode") // cep
-    private String zipCode;
-    @Column(name = "publicPlace") // logradouro
-    private String publicPlace;
-    @Column(name = "number")
+
+    // Endereço
+    private String zipCode;      // CEP
+    private String publicPlace;  // Logradouro
     private String number;
-    @Column(name = "complement")
     private String complement;
+
+    // Construtor vazio obrigatório para o JPA
+    protected Customer() {
+    }
+
+    // Construtor para criação do cliente
+    public Customer(String name,
+                    String cpf,
+                    LocalDate dateOfBirth,
+                    String email) {
+
+        this.name = name;
+        this.cpf = cpf;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+    }
+
+    // Getters
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public String getPublicPlace() {
+        return publicPlace;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public String getComplement() {
+        return complement;
+    }
 }

@@ -1,137 +1,118 @@
 package application.domain.account;
 
-/*
- * EN: Imports the Customer class, which represents the account owner.
- * PT: Importa a classe Customer, que representa o dono da conta.
- */
 import application.domain.customer.Customer;
-
-/*
- * EN: JPA annotations used to map this class to a database table.
- * PT: Anotações do JPA usadas para mapear esta classe para uma tabela no banco de dados.
- */
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-/*
- * EN: Marks this class as a JPA Entity (it will become a database table).
- * PT: Marca esta classe como uma Entidade JPA (ela vira uma tabela no banco).
- */
+// Entidade que representa uma conta bancária.
+// Esta classe será mapeada como uma tabela no banco de dados.
 @Entity
-
-/*
- * EN: Defines the name of the database table as "accounts".
- * PT: Define o nome da tabela no banco como "accounts".
- */
 @Table(name = "accounts")
 public class Account {
 
-    /*
-     * EN: Primary key of the account table.
-     *     A unique identifier for each account.
-     * PT: Chave primária da tabela account.
-     *     Identificador único de cada conta.
-     */
+    // Identificador único da conta (chave primária).
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    /*
-     * EN: Relationship: many accounts can belong to one customer.
-     * PT: Relacionamento: várias contas podem pertencer a um cliente.
-     */
+    // Relacionamento: várias contas podem pertencer a um cliente.
     @ManyToOne
-
-    /*
-     * EN: Creates the foreign key column "customer_id" in the accounts table.
-     * PT: Cria a coluna de chave estrangeira "customer_id" na tabela accounts.
-     */
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    /*
-     * EN: Stores the account balance.
-     *     Cannot be null.
-     * PT: Armazena o saldo da conta.
-     *     Não pode ser nulo.
-     */
-    @Column(nullable = false)
-    private BigDecimal balance;
+    // Saldo atual da conta.
+    // Não pode ser nulo.
+    @Column(nullable = false, precision = 19, scale = 2)
+    private BigDecimal balance = BigDecimal.ZERO;
 
-    /*
-     * EN: Stores the account status as a String in the database (ACTIVE, BLOCKED).
-     * PT: Armazena o status da conta como texto no banco (ACTIVE, BLOCKED).
-     */
+    // Status da conta (ACTIVE ou BLOCKED).
+    // Será salvo como texto no banco.
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private AccountStatus status;
 
-    /*
-     * EN: Protected constructor required by JPA.
-     *     Used internally by frameworks.
-     * PT: Construtor protegido exigido pelo JPA.
-     *     Usado internamente por frameworks.
-     */
+    // Construtor protegido exigido pelo JPA.
     protected Account() {
     }
 
-    /*
-     * EN: Creates a new account linked to a customer.
-     *     The account starts with zero balance and ACTIVE status.
-     * PT: Cria uma nova conta vinculada a um cliente.
-     *     A conta começa com saldo zero e status ATIVO.
-     */
+    // Cria uma nova conta vinculada a um cliente.
+    // Toda conta inicia com saldo zero e status ACTIVE.
     public Account(Customer customer) {
+
+        if (customer == null) {
+            throw new IllegalArgumentException("Cliente não pode ser nulo");
+        }
+
         this.customer = customer;
         this.balance = BigDecimal.ZERO;
         this.status = AccountStatus.ACTIVE;
     }
 
-    /*
-     * EN: Returns the unique identifier of the account.
-     * PT: Retorna o identificador único da conta.
-     */
+    // Retorna o ID da conta.
     public UUID getId() {
         return id;
     }
 
-    /*
-     * EN: Returns the customer who owns this account.
-     * PT: Retorna o cliente dono da conta.
-     */
+    // Retorna o cliente dono da conta.
     public Customer getCustomer() {
         return customer;
     }
 
-    /*
-     * EN: Returns the current account balance.
-     * PT: Retorna o saldo atual da conta.
-     */
+    // Retorna o saldo atual.
     public BigDecimal getBalance() {
         return balance;
     }
 
-    /*
-     * EN: Returns the current account status.
-     * PT: Retorna o status atual da conta.
-     */
+    // Retorna o status da conta.
     public AccountStatus getStatus() {
         return status;
     }
 
-    /*
-     * EN: Blocks the account, preventing operations.
-     * PT: Bloqueia a conta, impedindo operações.
-     */
+    // Realiza um depósito na conta.
+    // Apenas contas ativas podem receber depósito.
+    // O valor deve ser positivo.
+    public void deposit(BigDecimal amount) {
+
+        if (status != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Conta não está ativa");
+        }
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor do depósito deve ser positivo");
+        }
+
+        this.balance = this.balance.add(amount);
+    }
+
+    // Realiza um saque na conta.
+    // Verifica se a conta está ativa.
+    // Verifica se o valor é positivo.
+    // Verifica se há saldo suficiente.
+    public void withdraw(BigDecimal amount) {
+
+        if (status != AccountStatus.ACTIVE) {
+            throw new IllegalStateException("Conta não está ativa");
+        }
+
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Valor do saque deve ser positivo");
+        }
+
+        if (this.balance.compareTo(amount) < 0) {
+            throw new IllegalArgumentException("Saldo insuficiente");
+        }
+
+        this.balance = this.balance.subtract(amount);
+    }
+
+    // Bloqueia a conta, impedindo operações.
     public void block() {
         this.status = AccountStatus.BLOCKED;
     }
 
-    /*
-     * EN: Activates the account, allowing operations again.
-     * PT: Ativa a conta novamente, permitindo operações.
-     */
+    // Ativa a conta novamente.
     public void activate() {
         this.status = AccountStatus.ACTIVE;
     }

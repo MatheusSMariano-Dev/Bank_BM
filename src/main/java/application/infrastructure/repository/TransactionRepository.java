@@ -1,9 +1,9 @@
 package application.infrastructure.repository;
 
-import application.domain.account.Account;
+import application.domain.transaction.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface AccountRepository extends JpaRepository<Account, UUID> {
+public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
 }
