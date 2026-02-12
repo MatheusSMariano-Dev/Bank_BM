@@ -1,0 +1,3 @@
+# domain
+
+Documentação do pacote.

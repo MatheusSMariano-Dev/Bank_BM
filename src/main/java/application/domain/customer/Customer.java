@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Table
 @Entity
@@ -15,7 +16,7 @@ public class Customer {
     //identificador
     @Id
     @Column(name = "id")
-    private String id;
+    private UUID id;
 
     //dados pessoais
     @Column(name = "name")
