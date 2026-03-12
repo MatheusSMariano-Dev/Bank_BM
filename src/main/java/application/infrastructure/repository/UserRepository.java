@@ -11,5 +11,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     Optional <User> findByAccountNumber(String accountNumber);
 
-    Optional <User> findByCpfOrAccountNumber(String cpf, String accountNumber);
+    Optional<User> findFirstByCpfOrAccountNumber(String cpf, String accountNumber);
 }

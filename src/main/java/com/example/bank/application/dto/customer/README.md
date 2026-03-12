@@ -1,3 +1,0 @@
-# customer
-
-Documentação do pacote.

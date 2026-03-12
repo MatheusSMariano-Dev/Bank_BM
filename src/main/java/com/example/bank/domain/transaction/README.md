@@ -1,3 +1,0 @@
-# transaction
-
-Documentação do pacote.

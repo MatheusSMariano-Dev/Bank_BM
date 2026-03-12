@@ -1,3 +1,0 @@
-# exception
-
-Documentação do pacote.

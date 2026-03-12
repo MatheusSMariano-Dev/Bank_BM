@@ -1,3 +1,0 @@
-# shared
-
-Documentação do pacote.

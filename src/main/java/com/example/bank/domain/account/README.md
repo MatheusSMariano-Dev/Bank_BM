@@ -1,3 +1,0 @@
-# account
-
-Documentação do pacote.

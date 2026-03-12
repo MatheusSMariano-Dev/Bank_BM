@@ -1,3 +1,0 @@
-# repository
-
-Documentação do pacote.

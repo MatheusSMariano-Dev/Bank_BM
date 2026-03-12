@@ -1,3 +1,0 @@
-# dto
-
-Documentação do pacote.

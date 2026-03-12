@@ -1,25 +1,28 @@
 package application.controller;
 
+import application.config.JwtService;
 import application.controller.dto.user.LoginRequest;
 import application.controller.dto.user.RegisterRequest;
 import application.domain.account.User;
 import application.service.user.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 
-//essa classe é um controller
-@Controller
+@RestController
 @RequestMapping("/auth")
 public class AuthController {
 
     private final UserService service;
+    private final JwtService jwtService;
 
-    public AuthController(UserService service) {
+    public AuthController(UserService service, JwtService jwtService) {
         this.service = service;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
@@ -32,15 +35,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request){
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
 
         User user = service.authenticate(
                 request.getLogin(),
                 request.getPassword()
         );
-        return ResponseEntity.ok("Login realizado");
-}
 
+        String token = jwtService.generateToken(user.getCpf());
 
-
+        return ResponseEntity.ok(Map.of("token", token));
+    }
 }

@@ -1,3 +1,0 @@
-# service
-
-Documentação do pacote.

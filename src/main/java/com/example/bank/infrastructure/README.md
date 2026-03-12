@@ -1,3 +1,0 @@
-# infrastructure
-
-Documentação do pacote.

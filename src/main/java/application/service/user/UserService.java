@@ -30,7 +30,7 @@ public class UserService {
 
     public User authenticate (String login, String password){
         User user = repository
-                .findByCpfOrAccountNumber(login, login)
+                .findFirstByCpfOrAccountNumber(login, login)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
 
